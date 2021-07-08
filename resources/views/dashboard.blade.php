@@ -4,6 +4,7 @@
     @include('layouts.headers.cards')
     
     <div class="container-fluid mt--7" style="margin-top: 1000px; display: flex;">
+        
         <div class="table-responsive" style="padding-top: 100px;">
             <table class="table align-items-center">
             <thead class="thead-light">

@@ -34,9 +34,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('map', function () {
 		return view('pages.maps');
 	})->name('map');
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
+	Route::get('salary', function () {
+		return view('layouts.salary.get_salary');
+	})->name('salary');
 	Route::get('table-list', function () {
 		return view('pages.tables');
 	})->name('table');
