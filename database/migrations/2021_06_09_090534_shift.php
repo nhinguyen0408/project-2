@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Salary extends Migration
+class Shift extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class Salary extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('salary', function (Blueprint $table) {
+        Schema::create('shift', function (Blueprint $table) {
             $table->id();
-            $table->string('earnings')->unique();
+            $table->string('shift_name');
         });
-        
     }
 
     /**
@@ -28,7 +26,6 @@ class Salary extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('salary');
+        Schema::dropIfExists('shift');
     }
 }

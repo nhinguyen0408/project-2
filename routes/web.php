@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('salary', function () {
 		return view('layouts.salary.get_salary');
 	})->name('salary');
+	Route::get('employees', [EmployeesController::class, 'index'])->name('employees');
 	Route::get('table-list', function () {
 		return view('pages.tables');
 	})->name('table');
