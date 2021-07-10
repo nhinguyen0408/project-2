@@ -26,6 +26,8 @@ class Employees extends Migration
             $table->foreign('regency_id')->references('id')->on('regency');
             $table->unsignedBigInteger('salary_id');
             $table->foreign('salary_id')->references('id')->on('salary');
+            $table->unsignedBigInteger('shift_id');
+            $table->foreign('shift_id')->references('id')->on('shift');
         });
     }
 

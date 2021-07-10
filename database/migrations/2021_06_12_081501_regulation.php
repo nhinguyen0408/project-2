@@ -17,6 +17,7 @@ class Regulation extends Migration
         Schema::create('regulation', function (Blueprint $table) {
             $table->id();
             $table->integer('amount_of_money');
+            $table->string('description');
             $table->boolean('status');
         });
     }

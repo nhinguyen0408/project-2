@@ -1,18 +1,3 @@
-<!--
-=========================================================
-* Argon Dashboard - v1.2.0
-=========================================================
-* Product Page: https://www.creative-tim.com/product/argon-dashboard
-
-
-* Copyright  Creative Tim (http://www.creative-tim.com)
-* Coded by www.creative-tim.com
-
-
-
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="Creative Tim">
-  <title>Tính Lương</title>
+  <title>Quản lý nhân viên</title>
   <!-- Favicon -->
   <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
   <!-- Fonts -->
@@ -100,7 +85,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <input class="form-control" placeholder="Search" type="text">
+                <input class="form-control" placeholder="Search" type="text" name="search">
               </div>
             </div>
             <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -162,11 +147,7 @@
         <div class="header-body">
           <div class="row align-items-center py-4">
             <div class="col-lg-6 col-7">
-              <h6 class="h2 text-white d-inline-block mb-0">Tính lương</h6>
-            </div>
-            <div class="col-lg-6 col-5 text-right">
-              <a href="#" class="btn btn-sm btn-neutral">Import (Excel)</i></a>
-              <a href="#" class="btn btn-sm btn-neutral">Tính toán</i></a>
+              <h6 class="h2 text-white d-inline-block mb-0">Quản lý</h6>
             </div>
           </div>
         </div>
@@ -178,10 +159,74 @@
         <div class=" col ">
           <div class="card">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">Bảng Lương tháng {{('7')}}</h3>
+              <h3 class="mb-0">Nhân viên HCoffee</h3>
             </div>
             <div class="card-body">
-
+              <h4 class="mb-0">Bộ lọc:</h4>
+                <form action="">
+                  Chọn chức vụ: <select name="regency_id" id="">
+                        <option value="0" selected>------Chọn------</option>
+                    @foreach ($listRegency as $item)
+                        <option value="{{$item->id}}" @if ($item->id == $idRegency)
+                            selected
+                        @endif>{{$item->name_reg}}</option>
+                    @endforeach
+                  </select>
+                  Chọn ca làm: <select name="shift_id" id="">
+                        <option value="0" selected>------Chọn------</option>
+                    @foreach ($listShift as $item)
+                        <option value="{{$item->id}}" @if ($item->id == $idShift)
+                            selected
+                        @endif>{{$item->shift_name}}</option>
+                    @endforeach
+                  </select>
+                  <button class="btn btn-primary btn-sm">OK</button>
+                </form>
+                <div class="table-responsive" style="padding-top: 10px;">
+                    <table class="table align-items-center">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Họ Tên</th>
+                                <th scope="col">Địa Chỉ</th>
+                                <th scope="col">Giới Tính</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Số Điện Thoại</th>
+                                <th scope="col">Chức Vụ</th>
+                                <th scope="col">Ca làm</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <tr>
+                            @foreach ($listEmployee as $item)
+                                <tr>
+                                  <td>{{$item->first_name . ' ' . $item->last_name}}</td>
+                                  <td>{{$item->address}}</td>
+                                  <td>{{$item->SexName}}</td>
+                                  <td>{{$item->email}}</td>
+                                  <td>{{$item->phone}}</td>
+                                  <td>{{$item->name_reg}}</td>
+                                  <td>{{$item->shift_name}}</td>
+                                  <td class="text-right">
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" href="#">Xóa nhân viên</a>
+                                            <a class="dropdown-item" href="#">Sửa thông tin</a>
+                                            <a class="dropdown-item" href="#">Xem Lương</a>
+                                        </div>
+                                    </div>
+                            </td>
+                                </tr>
+                            @endforeach
+                            
+                        </tr>
+                        
+                    </tbody>
+                    </table> 
+                    {{ $listEmployee->appends(['search'=>$search,'shift_id'=>$idShift,'regency_id'=>$idRegency])->links('pagination::semantic-ui')}}      
+        </div>
             </div>
           </div>
         </div>
