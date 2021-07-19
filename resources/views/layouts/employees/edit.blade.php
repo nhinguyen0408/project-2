@@ -8,15 +8,15 @@
   <meta name="author" content="Creative Tim">
   <title>Quản lý nhân viên</title>
   <!-- Favicon -->
-  <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
+  <link rel="icon" href="/assets/img/brand/favicon.png" type="image/png">
   <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
   <!-- Icons -->
-  <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
-  <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+  <link rel="stylesheet" href="/assets/vendor/nucleo/css/nucleo.css" type="text/css">
+  <link rel="stylesheet" href="/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
   <!-- Page plugins -->
   <!-- Argon CSS -->
-  <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
+  <link rel="stylesheet" href="/assets/css/argon.css?v=1.2.0" type="text/css">
 </head>
 
 <body>
@@ -26,7 +26,7 @@
       <!-- Brand -->
       <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="javascript:void(0)">
-          <img src="../assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+          <img src="/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
         </a>
       </div>
       <div class="navbar-inner">
@@ -79,7 +79,7 @@
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Search form -->
-          <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" value="{{ $search }}" action="{{ route('employees.index')}}?id_regency={{$idRegency}}">
+          <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
             <div class="form-group mb-0">
               <div class="input-group input-group-alternative input-group-merge">
                 <div class="input-group-prepend">
@@ -111,7 +111,7 @@
               <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                   <span class="avatar avatar-sm rounded-circle">
-                    <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg">
+                    <img alt="Image placeholder" src="/assets/img/theme/team-4.jpg">
                   </span>
                   <div class="media-body  ml-2  d-none d-lg-block">
                     <span class="mb-0 text-sm  font-weight-bold">{{('Nhị Nguyễn')}}</span>
@@ -159,72 +159,71 @@
         <div class=" col ">
           <div class="card">
             <div class="card-header bg-transparent" style="display: flex; align-items:center">
-              <h3 class="mb-0">Nhân viên HCoffee</h3>
+              <h3 class="mb-0">Sửa Thông Tin</h3>
               <label>
                 <button class="btn btn-success" style="margin-left: 650px"><a href="{{ route('employees.create') }}" style='color: #fff;'>Thêm Nhân Viên</a></button>
               </label>
                 
             </div>
             <div class="card-body">
-              <h3 class="mb-0">Bộ lọc:</h3>
-                <form action="{{ route('employees.index') }}">
-                  Chọn chức vụ: <select name="regency_id" id="">
-                        <option value="0" selected disabled>------Chọn------</option>
-                    @foreach ($listRegency as $item)
-                        <option value="{{$item->id}}" @if ($item->id == $idRegency)
-                            selected
-                        @endif>{{$item->name_reg}}</option>
-                    @endforeach
-                  </select>
-                  
-                  </select>
-                  <button class="btn btn-primary btn-sm">OK</button>
+                <form action="{{ route('employees.store') }}" method="post">
+                    @csrf
+                  <div class="row">
+                    <div class="col-md-6">
+                        Mã Nhân Viên:&nbsp;&nbsp; <input type="text" readonly class="form-control form-control-alternative" value="{{$employee->id}}" name='employee_id'> <br>
+                        <div class="form-group name-empl" style="display: flex; align-items: center;">
+                            Họ:&nbsp;&nbsp; <input type="text" class="form-control form-control-alternative" name='first_name' style='margin-right:40px'
+                                value="{{$employee->first_name}}"
+                            >
+                            Tên:&nbsp;&nbsp; <input type="text" class="form-control form-control-alternative" name='last_name' 
+                                value="{{$employee->last_name}}"
+                            >
+                        </div>
+                        <div class="form-group">
+                            Giới tính: &nbsp;&nbsp;&nbsp; 
+                            <label><input type="radio" name="gender" value="1" id=""
+                                @if ($employee->gender == 1)
+                                    checked
+                                @endif
+                              > Nam</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label><input type="radio" name="gender" value="0" id=""
+                                @if ($employee->gender == 0)
+                                    checked
+                                @endif
+                              > Nữ</label>
+                            <br>
+                            Địa chỉ:&nbsp;&nbsp; <input type="text" class="form-control form-control-alternative" name='address'>
+                            Email:&nbsp;&nbsp; <input type="email" class="form-control form-control-alternative" name='email'>
+                            Điện thoại:&nbsp;&nbsp; <input type="telephone" class="form-control form-control-alternative" name='phone'>
+                            Chức vụ: 
+                            <select name="regency_id" id="">
+                                    <option value="0" selected disabled>------Chọn------</option>
+                                @foreach ($listRegency as $item)
+                                    <option value="{{$item->id}}">{{$item->name_reg}}</option>
+                                @endforeach
+                            </select>
+                            <br>
+                            Ca làm: 
+                            <select name="shift_id" id="">
+                                    <option value="0" selected disabled>------Chọn------</option>
+                                @foreach ($listShift as $item)
+                                    <option value="{{$item->id}}">{{$item->shift_name}}</option>
+                                @endforeach
+                            </select>
+                            <br>
+                            Lương: 
+                            <select name="salary_id" id="">
+                                    <option value="0" selected disabled>------Chọn------</option>
+                                    @foreach ($listSalary as $item)
+                                        <option value="{{ $item->id }}">{{ $item->earnings }}</option>
+                                    @endforeach
+                            </select>
+                            <br>
+                        </div>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-sm">Xác nhận</button>
                 </form>
-                <div class="table-responsive" style="padding-top: 10px;">
-                    <table class="table align-items-center">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Họ Tên</th>
-                                <th scope="col">Địa Chỉ</th>
-                                <th scope="col">Giới Tính</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Số Điện Thoại</th>
-                                <th scope="col">Chức Vụ</th>
-                                <th scope="col">Ca làm</th>
-                            </tr>
-                        </thead>
-                    <tbody>
-                        <tr>
-                            @foreach ($listEmployee as $item)
-                                <tr>
-                                  <td>{{$item->first_name . ' ' . $item->last_name}}</td>
-                                  <td>{{$item->address}}</td>
-                                  <td>{{$item->SexName}}</td>
-                                  <td>{{$item->email}}</td>
-                                  <td>{{$item->phone}}</td>
-                                  <td>{{$item->name_reg}}</td>
-                                  <td>{{$item->shift_name}}</td>
-                                  <td class="text-right">
-                                    <div class="dropdown">
-                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" href="#">Xóa nhân viên</a>
-                                            <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}">Sửa thông tin</a>
-                                            <a class="dropdown-item" href="#">Xem Lương</a>
-                                        </div>
-                                    </div>
-                            </td>
-                                </tr>
-                            @endforeach
-                            
-                        </tr>
-                        
-                    </tbody>
-                    </table> 
-                    {{ $listEmployee->appends(['search'=>$search,'regency_id'=>$idRegency])->links('pagination::semantic-ui')}}      
-        </div>
             </div>
           </div>
         </div>
