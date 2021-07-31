@@ -68,17 +68,22 @@
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('employees') }}">
+                                <a class="nav-link" href="{{ route('employees.index') }}">
                                     {{ __('Nhân viên') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="{{ route('time-keeping.index') }}">
+                                    {{ __('Check-in/Check-out') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="">
                                     {{ __('Lương') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="">
                                     {{ __('Thưởng phạt') }}
                                 </a>
                             </li>
@@ -94,13 +99,13 @@
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Search form -->
-          <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
+          <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" value="{{ $search }}">
             <div class="form-group mb-0">
               <div class="input-group input-group-alternative input-group-merge">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <input class="form-control" placeholder="Search" type="text">
+                <input class="form-control" placeholder="Search" type="text" name="search">
               </div>
             </div>
             <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -162,11 +167,7 @@
         <div class="header-body">
           <div class="row align-items-center py-4">
             <div class="col-lg-6 col-7">
-              <h6 class="h2 text-white d-inline-block mb-0">Tính lương</h6>
-            </div>
-            <div class="col-lg-6 col-5 text-right">
-              <a href="#" class="btn btn-sm btn-neutral">Import (Excel)</i></a>
-              <a href="#" class="btn btn-sm btn-neutral">Tính toán</i></a>
+              <h6 class="h2 text-white d-inline-block mb-0">Check-in & Check-out</h6>
             </div>
           </div>
         </div>
@@ -178,11 +179,46 @@
         <div class=" col ">
           <div class="card">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">Bảng Lương tháng {{('7')}}</h3>
+              <h3 class="mb-0">Danh sách chấm công tháng {{('7')}}</h3>
             </div>
+            @if (isset($time_keeping) && count($time_keeping))
+            <h3>Tìm tên nhân viên để xem lương</h3>
+              <div class="table-responsive" style="padding-top: 10px;">
+                    <table class="table align-items-center">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Họ Tên Nhân Viên</th>
+                                <th scope="col">Chấm công</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <tr>
+                            @foreach ($time_keeping as $item)
+                                <tr>
+                                  <td>{{$item->first_name . ' ' . $item->last_name}}</td>
+                                  <td>{{$item->checked}}</td>
+                                </tr>
+                            @endforeach
+                            
+                        </tr>
+                        
+                    </tbody>
+                    </table>   
+              </div>
+            @else
             <div class="card-body">
-
+                <form action="{{ route('time-keeping.import-excel') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-label" for="customFile">Trong file excel có các cột Mã nhân viên và check-in</label>
+                        <input type="file" name="excel" class="form-control"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                            
+                            <button class="btn btn-sm btn-neutral" style='margin-top: 20px;'>Import (Excel)</i></button>
+                    </div>
+                </form>
             </div>
+            @endif
           </div>
         </div>
       </div>

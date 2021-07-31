@@ -10,6 +10,17 @@ class Employee extends Model
     use HasFactory;
     protected $table = 'employees';
     public $timestamps = false;
+    public $fillable = [
+        'first_name',
+        'last_name',
+        'address',
+        'gender',
+        'email ',
+        'phone ',
+        'regency_id ',
+        'salary_id ',
+        'shift_id '
+    ];
 
     public function GetSexNameAttribute()
     {

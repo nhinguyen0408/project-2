@@ -166,7 +166,8 @@
                 
             </div>
             <div class="card-body">
-                <form action="{{ route('employees.store') }}" method="post">
+                <form action="{{ route('employees.update', $employee->id) }}" method="post">
+                  @method("PUT")
                     @csrf
                   <div class="row">
                     <div class="col-md-6">
@@ -192,14 +193,16 @@
                                 @endif
                               > Nữ</label>
                             <br>
-                            Địa chỉ:&nbsp;&nbsp; <input type="text" class="form-control form-control-alternative" name='address'>
-                            Email:&nbsp;&nbsp; <input type="email" class="form-control form-control-alternative" name='email'>
-                            Điện thoại:&nbsp;&nbsp; <input type="telephone" class="form-control form-control-alternative" name='phone'>
+                            Địa chỉ:&nbsp;&nbsp; <input type="text" class="form-control form-control-alternative" name='address' value="{{$employee->address}}">
+                            Email:&nbsp;&nbsp; <input type="email" class="form-control form-control-alternative" name='email' value="{{$employee->email}}">
+                            Điện thoại:&nbsp;&nbsp; <input type="telephone" class="form-control form-control-alternative" name='phone' value="{{$employee->phone}}">
                             Chức vụ: 
                             <select name="regency_id" id="">
                                     <option value="0" selected disabled>------Chọn------</option>
                                 @foreach ($listRegency as $item)
-                                    <option value="{{$item->id}}">{{$item->name_reg}}</option>
+                                    <option value="{{$item->id}}" @if ($employee->regency_id == $item->id)
+                                        selected
+                                    @endif>{{$item->name_reg}}</option>
                                 @endforeach
                             </select>
                             <br>
@@ -207,7 +210,9 @@
                             <select name="shift_id" id="">
                                     <option value="0" selected disabled>------Chọn------</option>
                                 @foreach ($listShift as $item)
-                                    <option value="{{$item->id}}">{{$item->shift_name}}</option>
+                                    <option value="{{$item->id}}" @if ($employee->shift_id == $item->id)
+                                        selected
+                                    @endif>{{$item->shift_name}}</option>
                                 @endforeach
                             </select>
                             <br>
@@ -215,7 +220,9 @@
                             <select name="salary_id" id="">
                                     <option value="0" selected disabled>------Chọn------</option>
                                     @foreach ($listSalary as $item)
-                                        <option value="{{ $item->id }}">{{ $item->earnings }}</option>
+                                        <option value="{{ $item->id }}" @if ($employee->salary_id == $item->id)
+                                        selected
+                                    @endif>{{ $item->earnings }}</option>
                                     @endforeach
                             </select>
                             <br>

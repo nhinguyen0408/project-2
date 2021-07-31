@@ -18,23 +18,39 @@ class EmployeesController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
-        $idRegency = $request->get('regency_id');
-        $listEmployees = Employee::where('first_name', 'like', "%$search%")
-            ->where('last_name', 'like', "%$search%")
+        if ($search != null) {
+            $idRegency = null;
+            $listEmployees = Employee::where('first_name', 'like', "%$search%")
+                ->orWhere('last_name', 'like', "%$search%")
             ->join('regency', 'employees.regency_id', '=', 'regency.id')
             ->join('shift', 'employees.shift_id', '=', 'shift.id')
+            ->select(
+                'employees.*',
+                'regency.id as regency_id',
+                'regency.name_reg',
+                'shift.id as shift_id',
+                'shift.shift_name'
+            )
+                ->paginate(7);
+        } else {
+            $search = null;
+            $idRegency = $request->get('regency_id');
+            $listEmployees = Employee::join('regency', 'employees.regency_id', '=', 'regency.id')
+            ->join('shift', 'employees.shift_id', '=', 'shift.id')
             ->where('regency_id', "$idRegency")
-        ->select(
-            'employees.*',
-            'regency.id as regency_id',
-            'regency.name_reg',
-            'shift.id as shift_id',
-            'shift.shift_name'
-        )
+                ->select(
+                    'employees.*',
+                    'regency.id as regency_id',
+                    'regency.name_reg',
+                    'shift.id as shift_id',
+                    'shift.shift_name'
+                )
             ->paginate(7);
+        }
+    
         $listRegency = Regency::all();
         $listShift = Shift::all();
-        return view('layouts.employees.mgn_employees', [
+        return view('layouts.website.employees.mgn_employees', [
             "listEmployee" => $listEmployees,
             "search" => $search,
             "listShift" => $listShift,
@@ -53,7 +69,7 @@ class EmployeesController extends Controller
         $listRegency = Regency::all();
         $listShift = Shift::all();
         $listSalary = Salary::all();
-        return view('layouts.employees.create', [
+        return view('layouts.website.employees.create', [
             "listRegency" => $listRegency,
             "listShift" => $listShift,
             "listSalary" => $listSalary,
@@ -121,14 +137,16 @@ class EmployeesController extends Controller
                 'shift.shift_name'
             )
             ->first();
+
         $listRegency = Regency::all();
         $listShift = Shift::all();
         $listSalary = Salary::all();
-        return view('layouts.employees.edit', [
+        return view('layouts.website.employees.edit', [
             "employee" => $employee,
             "listRegency" => $listRegency,
             "listShift" => $listShift,
             "listSalary" => $listSalary,
+    
         ]);
     }
 
@@ -141,7 +159,20 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Employee::where('id', $id)->update([
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'address'  => $request->get('address'),
+            'gender' => $request->get('gender'),
+            'email' => $request->get('email'),
+            'phone' => $request->get('phone'),
+            'regency_id ' => $request->get('regency_id'),
+            'salary_id ' => $request->get('salary_id'),
+            'shift_id ' => $request->get('shift_id')
+        ]);
+        return redirect(route('employees.index'));
+
+        // chua update duoc loi regency_id
     }
 
     /**

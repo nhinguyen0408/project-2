@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Timekeeping extends Migration
+class CreateTimeKeepingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class Timekeeping extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('timekeeping', function (Blueprint $table) {
+        Schema::create('time_keeping', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees');
-            $table->dateTime('checked');
+            $table->string('checked');
+            $table->timestamps();
         });
     }
 
@@ -29,7 +28,6 @@ class Timekeeping extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('timekeeping');
+        Schema::dropIfExists('time_keeping');
     }
 }

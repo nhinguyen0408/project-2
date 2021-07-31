@@ -94,6 +94,11 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('time-keeping.index') }}">
+                                    {{ __('Check-in/Check-out') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('user.index') }}">
                                     {{ __('Lương') }}
                                 </a>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\TimeKeepingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,9 +37,13 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.maps');
 	})->name('map');
 	Route::get('salary', function () {
-		return view('layouts.salary.get_salary');
+		return view('layouts.website.salary.get_salary');
 	})->name('salary');
 	Route::resource('employees', EmployeesController::class);
+	Route::prefix('time-keeping')->name('time-keeping.')->group(function () {
+		Route::get('/', [TimeKeepingController::class, 'index'])->name('index');
+		Route::post('/import-excel', [TimeKeepingController::class, 'importExcel'])->name('import-excel');
+	});
 	Route::get('table-list', function () {
 		return view('pages.tables');
 	})->name('table');
