@@ -55,7 +55,8 @@ class EmployeesController extends Controller
             "search" => $search,
             "listShift" => $listShift,
             "listRegency" => $listRegency,
-            "idRegency" => $idRegency
+            "idRegency" => $idRegency,
+            "page_title" => "Quản Lý Nhân Viên"
         ]);
     }
 
@@ -73,6 +74,7 @@ class EmployeesController extends Controller
             "listRegency" => $listRegency,
             "listShift" => $listShift,
             "listSalary" => $listSalary,
+            "page_title" => "Thêm Nhân Viên"
         ]);
     }
 
@@ -146,7 +148,7 @@ class EmployeesController extends Controller
             "listRegency" => $listRegency,
             "listShift" => $listShift,
             "listSalary" => $listSalary,
-    
+            "page_title" => "Sửa Thông Tin Nhân Viên"
         ]);
     }
 
