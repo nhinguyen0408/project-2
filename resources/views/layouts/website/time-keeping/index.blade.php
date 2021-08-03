@@ -42,10 +42,10 @@
                     </tbody>
                     </table>   
               </div>
-            @elseif($important != null)
+            @elseif(isset($important) && $important != null)
               <span class="d-flex w-100 align-items-center" style="line-height: 40px  ; padding: 10px 10px 10px 300px">{!!$important !!}</span>
             @else
-            <div class="card-body">
+              <div class="card-body">
                 <form action="{{ route('time-keeping.import-excel') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
@@ -57,6 +57,30 @@
                     </div>
                 </form>
             </div>
+            @endif
+            @if(isset($employee_time_keeping) && count($employee_time_keeping))
+                <div class="table-responsive" style="padding-top: 10px;">
+                    <table class="table align-items-center">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Họ Tên Nhân Viên</th>
+                                <th scope="col">Chấm công</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <tr>
+                            @foreach ($employee_time_keeping as $item)
+                                <tr>
+                                  <td>{{$item->first_name . ' ' . $item->last_name}}</td>
+                                  <td>{{$item->checked}}</td>
+                                </tr>
+                            @endforeach
+                            
+                        </tr>
+                        
+                    </tbody>
+                    </table>   
+              </div>
             @endif
           </div>
         </div>

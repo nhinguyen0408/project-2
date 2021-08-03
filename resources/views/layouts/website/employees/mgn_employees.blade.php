@@ -26,7 +26,7 @@
                 
             </div>
             <div class="card-body">
-              <h3 class="mb-0">Bộ lọc:</h3>
+              <h3 class="mb-0">Vui lòng chọn chức vụ để tìm kiếm nhân viên:</h3>
                 <form action="{{ route('employees.index') }}">
                   Chọn chức vụ: <select name="regency_id" id="">
                         <option value="0" selected disabled>------Chọn------</option>
@@ -72,6 +72,8 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="#">Xóa nhân viên</a>
                                             <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}">Sửa thông tin</a>
+                                            <a class="dropdown-item" href="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
+                                            <a class="dropdown-item" href="{{ route('time-keeping.working', $item->id) }}">Xem Giờ Làm</a>
                                             <a class="dropdown-item" href="#">Xem Lương</a>
                                         </div>
                                     </div>

@@ -99,12 +99,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="">
                                     {{ __('Lương') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="">
                                     {{ __('Thưởng phạt') }}
                                 </a>
                             </li>

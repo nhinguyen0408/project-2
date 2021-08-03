@@ -27,25 +27,19 @@ Auth::routes();
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::get('upgrade', function () {
-		return view('pages.upgrade');
-	})->name('upgrade');
-	Route::get('map', function () {
-		return view('pages.maps');
-	})->name('map');
+	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+
 	Route::get('salary', function () {
 		return view('layouts.website.salary.get_salary');
 	})->name('salary');
 	Route::resource('employees', EmployeesController::class);
 	Route::prefix('time-keeping')->name('time-keeping.')->group(function () {
 		Route::get('/', [TimeKeepingController::class, 'index'])->name('index');
+		Route::get('/view/{id}', [TimeKeepingController::class, 'view'])->name('view');
+		Route::get('/working/{id}', [TimeKeepingController::class, 'working'])->name('working');
 		Route::post('/import-excel', [TimeKeepingController::class, 'importExcel'])->name('import-excel');
+		Route::get('/salary-calculation', [TimeKeepingController::class, 'salary_calculation'])->name('salary-calculation');
 	});
-	Route::get('table-list', function () {
-		return view('pages.tables');
-	})->name('table');
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 });
