@@ -21,7 +21,6 @@ class TimeKeepingImport implements ToModel, WithHeadingRow
         $date = $row["datetime"];
         $check = date('Y-m-d H:i:m', strtotime($date));
         // dd($row['no'] . $date->toDateTimeString());
-        var_dump($check);
         $data = [
             'employee_id' => number_format($row['no']),
             'checked' => $check

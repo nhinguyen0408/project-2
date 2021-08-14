@@ -76,7 +76,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('salary') }}">
+                    <a class="nav-link" href="{{ route('salary.index') }}">
                         <i class="ni ni-tv-2 text-primary"></i> {{ __('Tính lương') }}
                     </a>
                 </li>

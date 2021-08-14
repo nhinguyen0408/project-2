@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\TimeKeepingController;
+use App\Http\Controllers\SalaryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,15 +32,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 
-	Route::get('salary', function () {
-		return view('layouts.website.salary.get_salary');
-	})->name('salary');
+	Route::prefix('salary')->name('salary.')->group(function () {
+		Route::get('', [SalaryController::class, 'index' ] )->name('index');
+		Route::get('/salary-calculation', [SalaryController::class, 'salary_calculation'])->name('salary-calculation');
+	});
 	Route::resource('employees', EmployeesController::class);
 	Route::prefix('time-keeping')->name('time-keeping.')->group(function () {
 		Route::get('/', [TimeKeepingController::class, 'index'])->name('index');
 		Route::get('/view/{id}', [TimeKeepingController::class, 'view'])->name('view');
 		Route::get('/working/{id}', [TimeKeepingController::class, 'working'])->name('working');
 		Route::post('/import-excel', [TimeKeepingController::class, 'importExcel'])->name('import-excel');
-		Route::get('/salary-calculation', [TimeKeepingController::class, 'salary_calculation'])->name('salary-calculation');
+		Route::get('/reset', [TimeKeepingController::class, 'reset'])->name('reset');
 	});
 });

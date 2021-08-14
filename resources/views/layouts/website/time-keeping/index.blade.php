@@ -7,6 +7,10 @@
             <div class="col-lg-6 col-7">
               <h6 class="h2 text-white d-inline-block mb-0">Check-in & Check-out</h6>
             </div>
+            <div class="col-lg-6 col-5 text-right">
+              <a href="{{ route('time-keeping.reset') }}" class="btn btn-sm btn-neutral" 
+              style="background: rgb(71, 12, 12) !important;  color: white">Reset Check-in/Check-out</i></a>
+            </div>
           </div>
         </div>
       </div>
@@ -17,7 +21,7 @@
         <div class=" col ">
           <div class="card">
             <div class="card-header bg-transparent">
-              <h3 class="mb-0">Danh sách chấm công tháng {{('7')}}</h3>
+              <h3 class="mb-0">Danh sách chấm công tháng {{($month)}}</h3>
             </div>
             @if (isset($time_keeping) && count($time_keeping) && isset($search))
               <div class="table-responsive" style="padding-top: 10px;">
