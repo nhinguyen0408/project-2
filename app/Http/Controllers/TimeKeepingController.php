@@ -52,6 +52,13 @@ class TimeKeepingController extends Controller
 
     public function view($id)
     {
+        $check_month = TimeKeeping::first();
+        if(isset($check_month)){
+            $month = date('m', strtotime($check_month->checked));
+            $data['month'] = $month;
+        }else{
+            $data['month'] = null;
+        }
         $employee_time_keeping = TimeKeeping::join('employees', 'time_keeping.employee_id', '=', 'employees.id')
         ->where('employees.id', $id)->get();
         $data['employee_time_keeping'] = $employee_time_keeping;
@@ -61,6 +68,13 @@ class TimeKeepingController extends Controller
 
     public function working($id)
     {
+        $check_month = TimeKeeping::first();
+        if(isset($check_month)){
+            $month = date('m', strtotime($check_month->checked));
+            $data['month'] = $month;
+        }else{
+            $data['month'] = null;
+        }
         $data['page_title'] = "Xem Giờ Làm";
         return view('layouts.website.time-keeping.index', $data);
     }
