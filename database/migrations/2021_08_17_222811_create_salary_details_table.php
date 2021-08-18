@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTable extends Migration
+class CreateSalaryDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,6 +18,7 @@ class CreateTable extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->string('month',2);
             $table->string('salary_earning');
+            $table->float('total_time');
             $table->string('bonus_earning');
             $table->string('penalize');
         });

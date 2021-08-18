@@ -85,10 +85,12 @@ class TimeKeepingController extends Controller
         return redirect()->back();
     }
     public function reset(){
-        DB::table('time_keeping')->delete();
+        // DB::table('time_keeping')->delete();
         DB::table('overtime')->delete();
         DB::table('working_hours')->delete();
         DB::table('late_time')->delete();
+        DB::table('regulation_details')->delete();
+        DB::table('salary_details')->delete();
         return redirect()->back();
     }
 }

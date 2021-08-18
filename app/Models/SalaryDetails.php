@@ -10,7 +10,7 @@ class SalaryDetails extends Model
     use HasFactory;
     protected $table = 'salary_details';
     protected $fillable = [
-        'employee_id','month','earning'
+        'employee_id','month','salary_earning','total_time','bonus_earning','penalize'
     ];
     public $timestamps = false;
 }

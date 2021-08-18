@@ -24,7 +24,48 @@
               <h3 class="mb-0">Bảng Lương tháng {{($month)}}</h3>
             </div>
             <div class="card-body">
-
+              @if(isset($data_salary))
+              <table class="table align-items-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Họ Tên</th>
+                        <th scope="col">Chức vụ</th>
+                        <th scope="col">Tổng công làm</th>
+                        <th scope="col">Lương tháng</th>
+                        <th scope="col">Lương thưởng</th>
+                        <th scope="col">Tổng phạt</th>
+                    </tr>
+                </thead>
+            <tbody>
+                <tr>
+                    @foreach ($data_salary as $item)
+                        <tr>
+                          <td>{{$item->first_name . ' ' . $item->last_name}}</td>
+                          <td>
+                              @php 
+                                $regency = App\Models\Regency::find($item->regency_id);
+                                $shift = App\Models\Shift::find($item->shift_id);
+                              @endphp
+                              {{$regency->name_reg . ' ' .'('.$shift->shift_name.')'}}
+                          </td>
+                          <td>{{$item->total_time}}
+                            @if($item->regency_id == 1 || $item->regency_id == 4 || $item->regency_id == 6) 
+                              {{' (công)'}}
+                             @else 
+                             {{' (giờ)'}}
+                             @endif
+                          </td>
+                          <td>{{number_format($item->salary_earning, 0, ',')}}</td>
+                          <td>{{number_format($item->bonus_earning, 0, ',')}}</td>
+                          <td>{{number_format($item->penalize, 0, ',')}}</td>                      
+                        </tr>
+                    @endforeach
+                    
+                </tr>
+                
+            </tbody>
+            </table> 
+            @endif
             </div>
           </div>
         </div>
