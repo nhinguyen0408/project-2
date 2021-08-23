@@ -77,7 +77,7 @@
                                             <a class="dropdown-item" href="#">Xem Lương</a>
                                         </div>
                                     </div>
-                            </td>
+                                  </td>
                                 </tr>
                             @endforeach
                             

@@ -34,6 +34,7 @@
                         <th scope="col">Lương tháng</th>
                         <th scope="col">Lương thưởng</th>
                         <th scope="col">Tổng phạt</th>
+                        <th scope="col">Tổng Lương</th>
                     </tr>
                 </thead>
             <tbody>
@@ -57,7 +58,20 @@
                           </td>
                           <td>{{number_format($item->salary_earning, 0, ',')}}</td>
                           <td>{{number_format($item->bonus_earning, 0, ',')}}</td>
-                          <td>{{number_format($item->penalize, 0, ',')}}</td>                      
+                          <td>{{number_format($item->penalize, 0, ',')}}</td>  
+                          <td>{{number_format($item->salary_earning + $item->bonus_earning - $item->penalize, 0, ',')}}</td>                    
+                          <td class="text-right">
+                            <div class="dropdown">
+                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <a class="dropdown-item" href="{{ route('time-keeping.view', $item->employee_id) }}">Xem Lịch Sử Chấm Công</a>
+                                    <a class="dropdown-item" href="{{ route('time-keeping.working', $item->employee_id) }}">Xem Giờ Làm</a>
+                                    <a class="dropdown-item" href="#">Xem Chi Tiết</a>
+                                </div>
+                            </div>
+                          </td>
                         </tr>
                     @endforeach
                     

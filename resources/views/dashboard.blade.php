@@ -5,35 +5,41 @@
     
     <div class="container-fluid mt--7" style="margin-top: 1000px; display: flex;">
         
-        <div class="table-responsive" style="padding-top: 100px;">
-            <table class="table align-items-center">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Project</th>
-                    <th scope="col">Budget</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">
-                        Hoc sinh
-                    </th>
-                    <td class="text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
+        <div class="table-responsive" style="padding-top: 40px; padding-bottom: 60px">
+          
+            <div class="card bg-gradient-default shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                            <h2 class="text-white mb-0">Sales value</h2>
                         </div>
-                    </td>
-                </tr>
-                
-            </tbody>
-            </table>       
+                        <div class="col">
+                            <ul class="nav nav-pills justify-content-end">
+                                <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$" data-suffix="k">
+                                    <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                                        <span class="d-none d-md-block">Month</span>
+                                        <span class="d-md-none">M</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" data-toggle="chart" data-target="#chart-sales" data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}' data-prefix="$" data-suffix="k">
+                                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                                        <span class="d-none d-md-block">Week</span>
+                                        <span class="d-md-none">W</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart">
+                        <!-- Chart wrapper -->
+                        <canvas id="chart-sales" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>   
         </div>
     </div>
     

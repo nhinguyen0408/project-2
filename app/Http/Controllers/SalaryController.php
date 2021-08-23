@@ -60,12 +60,12 @@ class SalaryController extends Controller
                     if (count($day_working) >= 2) {
                         $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
                         $hour_late = abs(strtotime(date('H:i:s', strtotime($day_working->min('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
-                        $hour_working = number_format($hour/3600, 2) - 1.5;
+                        $hour_working_total = number_format($hour/3600, 2) - 1.5;
                         $late = number_format($hour_late/3600, 2);
                         $status = 1;
-                        if ($hour_working > 8) {
-                            $overtime = $hour_working - 8;
-                            $check_overtime = OverTime::where('day', $day)->first();
+                        if ($hour_working_total > 8) {
+                            $overtime = $hour_working_total - 8;
+                            $check_overtime = OverTime::where('day', $day)->where('employee_id',$val_em->id)->first();
                             if ($check_overtime == null) {
                                 $store_overtime = new OverTime([
                                     'employee_id' => $val_em->id,
@@ -74,8 +74,9 @@ class SalaryController extends Controller
                                 ]);
                                 $store_overtime->save();
                             }
+                            $hour_working = 8;
                         }
-                        $check_late = LateTime::where('day', $day)->first();
+                        $check_late = LateTime::where('day', $day)->where('employee_id',$val_em->id)->first();
                         if($check_late == null) {
                             $store_late = new LateTime([
                                 'employee_id' => $val_em->id,
@@ -175,6 +176,11 @@ class SalaryController extends Controller
                         $total_penalize =  $total_penalize + $val_pen->amount_of_money;
                     }
                 }
+                $get_over_time = OverTime::where('employee_id',$val_em->id)->get();
+                $total_over_time = 0;
+                foreach ($get_over_time as $val_over){
+                    $total_over_time =$total_over_time + $val_over->hours;
+                }
                 if($val_em->regency_id == 1 || $val_em->regency_id == 4 || $val_em->regency_id == 6){
                     $total_working_day = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
                     $earning = $total_working_day * $salary->earnings;
@@ -185,8 +191,8 @@ class SalaryController extends Controller
                     foreach($worked as $item){
                         $total_working_hours = $total_working_hours + $item->hours;
                     }
-                    $earning = $total_working_hours* $salary->earnings;
-                    $total_time = $total_working_hours;
+                    $earning = $total_working_hours* $salary->earnings + $total_over_time * $salary->earnings *1.4;
+                    $total_time = $total_working_hours + $total_over_time;
                 }
                 $check_salary_details = SalaryDetails::where('employee_id', $val_em->id)->where('month', $month)->first();
                 if(!isset($check_salary_details)){
