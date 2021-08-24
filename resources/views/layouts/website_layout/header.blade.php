@@ -18,17 +18,22 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('salary.index') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Tính lương') }}
+                        <i class="ni ni-tv-2 text-primary"></i> <span class="font-weight-bold">{{ __('Tính lương') }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
                         <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Quản lý') }}</span>
+                        <span class="nav-link-text" style="color: #f4645f; font-weight: bold">{{ __('Quản lý') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                              <a class="nav-link" href="" style="color: rgb(190, 146, 146); font-weight: bold">
+                                  {{ __('Quản lý giờ làm') }}
+                              </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('employees.index') }}">
                                     {{ __('Nhân viên') }}
@@ -44,11 +49,12 @@
                                     {{ __('Lương') }}
                                 </a>
                             </li>
+                            
                             <li class="nav-item">
-                                <a class="nav-link" href="">
-                                    {{ __('Thưởng phạt') }}
-                                </a>
-                            </li>
+                              <a class="nav-link" href="">
+                                  {{ __('Thưởng phạt') }}
+                              </a>
+                          </li>
                         </ul>
         </div>
       </div>

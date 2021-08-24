@@ -90,7 +90,6 @@ class TimeKeepingController extends Controller
         DB::table('working_hours')->delete();
         DB::table('late_time')->delete();
         DB::table('regulation_details')->delete();
-        DB::table('salary_details')->delete();
         return redirect()->back();
     }
 }
