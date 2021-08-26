@@ -25,6 +25,9 @@ class TimeKeepingImport implements ToModel, WithHeadingRow
             'employee_id' => number_format($row['no']),
             'checked' => $check
         ];
-        return new TimeKeeping($data);
+        $check_import = TimeKeeping::where('employee_id', number_format($row['no']))->where('checked', $check)->first();
+        if($check_import == null){
+            return new TimeKeeping($data);
+        }
     }
 }

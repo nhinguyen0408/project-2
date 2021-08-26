@@ -48,6 +48,19 @@
               </div>
             @elseif(isset($important) && $important != null)
               <span class="d-flex w-100 align-items-center" style="line-height: 40px  ; padding: 10px 10px 10px 300px">{!!$important !!}</span>
+              <div class="card-body">
+                <h2>Cập nhật danh sách chấm công</h2>
+                <form action="{{ route('time-keeping.import-excel') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-label" for="customFile">Trong file excel có các cột Mã nhân viên và check-in</label>
+                        <input type="file" name="excel" class="form-control"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                            
+                            <button class="btn btn-sm btn-neutral" style='margin-top: 20px;'>Cập nhật chấm công</i></button>
+                    </div>
+                </form>
+              </div>
             @else
               <div class="card-body">
                 <form action="{{ route('time-keeping.import-excel') }}" method="post" enctype="multipart/form-data">
@@ -60,7 +73,7 @@
                             <button class="btn btn-sm btn-neutral" style='margin-top: 20px;'>Import (Excel)</i></button>
                     </div>
                 </form>
-            </div>
+              </div>
             @endif
             @if(isset($employee_time_keeping) && count($employee_time_keeping))
                 <div class="table-responsive" style="padding-top: 10px;">

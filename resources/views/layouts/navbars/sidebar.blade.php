@@ -89,6 +89,11 @@
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
+                                <a class="nav-link" href="" style="color: rgb(190, 146, 146); font-weight: bold">
+                                    {{ __('Quản lý giờ làm') }}
+                                </a>
+                              </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('employees.index') }}">
                                     {{ __('Nhân viên') }}
                                 </a>

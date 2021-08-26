@@ -7,7 +7,7 @@
         @php    
             $check_salary = App\Models\SalaryDetails::first();
             $total_salary_arr = null;
-            $i = 5;
+            $i = 3;
             if(isset($check_salary)){
                 $total_salary_arr = [];
                 do{
@@ -28,11 +28,25 @@
                 } while ($i <=12)   ;
                 
             }
-            $salary_latest = App\Models\SalaryDetails::where('month',5)->get();
+            $mon = $check_salary->max("month");
+            $salary_latest = App\Models\SalaryDetails::where('month',$mon)->get();
+            $salary_last_month = App\Models\SalaryDetails::where('month',$mon -2)->get();
+            $total_salary_last_month = 0;
+            $total_hours_last_month = 0;
+            if(isset($salary_last_month) && count($salary_last_month)){
+                foreach($salary_last_month as $value){
+                            $total_salary_last_month = $total_salary_last_month + $value->salary_earning + $value->bonus_earning - $value->penalize;
+                            $total_hours_last_month = $total_hours_last_month + $value->total_time;
+                        }
+            }
             $total_salary_latest = 0;
+            $total_hours = 0;
             foreach($salary_latest as $val){
                             $total_salary_latest = $total_salary_latest + $val->salary_earning + $val->bonus_earning - $val->penalize;
+                            $total_hours = $total_hours + $val->total_time;
                         }
+            $salary_percent = number_format((($total_salary_latest - $total_salary_last_month) / $total_salary_last_month) * 100, 2);
+            $hours_percent = number_format((($total_hours - $total_hours_last_month) / $total_hours_last_month) * 100,2);
         @endphp
         <div class="total_number" style=" display: flex; align-items:center; justify-content: flex-end">
             {{-- Tổng giờ làm nhân viên --}}
@@ -42,7 +56,7 @@
                         <div class="row">
                             <div class="col">
                                 <h5 class="card-title text-uppercase text-muted mb-0">Tổng Giờ Làm việc</h5>
-                                <span class="h2 font-weight-bold mb-0">2,356 Giờ</span>
+                                <span class="h2 font-weight-bold mb-0">{{number_format($total_hours, 0, ',') . ' Giờ'}}</span>
                             </div>
                             <div class="col-auto">
                                 <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -51,7 +65,7 @@
                             </div>
                         </div>
                         <p class="mt-3 mb-0 text-muted text-sm">
-                            <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                            @if($hours_percent >= 0) <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @else <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> @endif {{$hours_percent}} %</span>
                             <span class="text-nowrap">So với tháng Trước</span>
                         </p>
                     </div>
@@ -73,8 +87,7 @@
                             </div>
                         </div>
                         <p class="mt-3 mb-0 text-muted text-sm">
-                            <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                            <span class="mr-2" style="color: red"><i class="fa fa-arrow-down"></i> 3.48%</span>
+                            @if($salary_percent >= 0) <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> @else <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> @endif {{$salary_percent}} %</span>
                             <span class="text-nowrap">So với tháng trước</span>
                         </p>
                     </div>
@@ -124,25 +137,7 @@
                     </div>
                 </div>   
             </div>
-            {{-- Giờ làm --}}
-            <div class="col-xl-4" style="padding-top: 40px; padding-bottom: 60px">
-                <div class="card shadow" style=" box-shadow: 10px 10px 5px rgba(219, 218, 218, 0.6) !important">
-                    <div class="card-header bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Thống kê tổng quan</h6>
-                                <h2 class="mb-0">Giờ làm việc(M)</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <!-- Chart -->
-                        <div class="chart">
-                            <canvas id="chart-orders" class="chart-canvas"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>   
+             
         </div> 
         
     </div>

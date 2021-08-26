@@ -20,24 +20,25 @@ class SalaryController extends Controller
         if(isset($check_month)){
             $month = date('m', strtotime($check_month->checked));
             $data['month'] = $month;
+            $check_salary_details = SalaryDetails::where('month', $month)->first();
+            if(isset($check_salary_details)){
+                $salary_details = SalaryDetails::join('employees','salary_details.employee_id','=','employees.id')
+                ->where('month', $month)
+                ->select(
+                    'salary_details.*',
+                    'employees.first_name',
+                    'employees.last_name',
+                    'employees.regency_id',
+                    'employees.shift_id'
+                    )->get();
+                $data['data_salary'] = $salary_details; 
+            } else {
+                $data['data_salary'] = null;
+            }
         }else{
             $data['month'] = null;
         }
-        $check_salary_details = SalaryDetails::where('month', $month)->first();
-        if(isset($check_salary_details)){
-            $salary_details = SalaryDetails::join('employees','salary_details.employee_id','=','employees.id')
-            ->where('month', $month)
-            ->select(
-                'salary_details.*',
-                'employees.first_name',
-                'employees.last_name',
-                'employees.regency_id',
-                'employees.shift_id'
-                )->get();
-            $data['data_salary'] = $salary_details; 
-        } else {
-            $data['data_salary'] = null;
-        }
+       
         $data['page_title'] = 'Tính lương';
         return view('layouts.website.salary.get_salary', $data);
     }
@@ -130,7 +131,15 @@ class SalaryController extends Controller
                 $total_late_day = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
                     if($total_late_day >= 10){
                         $check_late = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',10)->first();
-                        if(!isset($check_bonus)){
+                        $check_late_2 = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',8)->first();
+                        $check_late_3 = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',9)->first();
+                        if(isset($check_late_2)){
+                            RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',8)->delete();
+                        }
+                        if(isset($check_late_3)){
+                            RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',9)->delete();
+                        }
+                        if(!isset($check_late)){
                             $late = new RegulationDetails([
                                 'employee_id'=> $val_em->id,
                                 'regulation_id' => 10,
@@ -139,7 +148,11 @@ class SalaryController extends Controller
                         }
                     } else if($total_late_day >= 5){
                         $check_late = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',9)->first();
-                        if(!isset($check_bonus)){
+                        $check_late_2 = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',8)->first();
+                        if(isset($check_late_2)){
+                            RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',8)->delete();
+                        }
+                        if(!isset($check_late)){
                             $late = new RegulationDetails([
                                 'employee_id'=> $val_em->id,
                                 'regulation_id' => 9,
@@ -148,7 +161,7 @@ class SalaryController extends Controller
                         }
                     } else if($total_late_day >= 3){
                         $check_late = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',8)->first();
-                        if(!isset($check_bonus)){
+                        if(!isset($check_late)){
                             $late = new RegulationDetails([
                                 'employee_id'=> $val_em->id,
                                 'regulation_id' => 8,
@@ -158,6 +171,7 @@ class SalaryController extends Controller
                     }
                 // XU LY TINH LUONG
                 $salary = Salary::where('id',$val_em->salary_id)->first();
+                    // tính thưởng
                 $bonus_earning = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
                     ->where('regulation_details.employee_id',$val_em->id)
                     ->where('status',1)->get();
@@ -167,6 +181,7 @@ class SalaryController extends Controller
                         $total_bonus_earning =  $total_bonus_earning + $val_bonus->amount_of_money;
                     }
                 }
+                    // tính phạt
                 $penalize = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
                 ->where('regulation_details.employee_id',$val_em->id)
                 ->where('status',0)->get();
@@ -176,11 +191,13 @@ class SalaryController extends Controller
                         $total_penalize =  $total_penalize + $val_pen->amount_of_money;
                     }
                 }
+                    // tính tổng tăng ca
                 $get_over_time = OverTime::where('employee_id',$val_em->id)->get();
                 $total_over_time = 0;
                 foreach ($get_over_time as $val_over){
                     $total_over_time =$total_over_time + $val_over->hours;
                 }
+                    // Tính lương
                 if($val_em->regency_id == 1 || $val_em->regency_id == 4 || $val_em->regency_id == 6){
                     $total_working_day = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
                     $earning = $total_working_day * $salary->earnings;
@@ -205,6 +222,14 @@ class SalaryController extends Controller
                         'penalize' => $total_penalize
                     ]);
                     $salary_details->save();
+                } else {
+                    $check_salary_details->employee_id = $val_em->id;
+                    $check_salary_details->month = $month;
+                    $check_salary_details->salary_earning = $earning;
+                    $check_salary_details->total_time = $total_time;
+                    $check_salary_details->bonus_earning = $total_bonus_earning;
+                    $check_salary_details->penalize = $total_penalize;
+                    $check_salary_details->save();
                 }
                 
             }
