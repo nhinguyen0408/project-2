@@ -47,24 +47,24 @@ class SalaryController extends Controller
     {
         $check_time_keeping = TimeKeeping::first();
         $month = date('m', strtotime($check_time_keeping->checked));
-        if(isset($check_time_keeping)){
+        if(isset($check_time_keeping)){ // ktra có bản ghi thì chạy
             
             $check_month = TimeKeeping::first();
-            $employee = Employee::all();
-            foreach ($employee as $val_em) {
-                $time_keeping = TimeKeeping::where('employee_id', $val_em->id)->get();
+            $employee = Employee::all(); 
+            foreach ($employee as $val_em) { // chạy lần lượt từng nhân viên
+                $time_keeping = TimeKeeping::where('employee_id', $val_em->id)->get(); // lấy dữ liệu chấm công 
                 foreach ($time_keeping as $val_time) {
                     //$day = $val_time->checked;
                     $day = date('Y-m-d', strtotime($val_time->checked));
                     //dd(date('Y-m-d', strtotime($val_time->checked)));
-                    $day_working = TimeKeeping::where('employee_id', $val_em->id)->where('checked', 'like', "%$day%")->get();
-                    if (count($day_working) >= 2) {
-                        $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
+                    $day_working = TimeKeeping::where('employee_id', $val_em->id)->where('checked', 'like', "%$day%")->get(); // lấy dữ liệu các ngày giống nhau
+                    if (count($day_working) >= 2) { // check in check out đủ
+                        $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00')))); 
                         $hour_late = abs(strtotime(date('H:i:s', strtotime($day_working->min('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
                         $hour_working_total = number_format($hour/3600, 2) - 1.5;
                         $late = number_format($hour_late/3600, 2);
                         $status = 1;
-                        if ($hour_working_total > 8) {
+                        if ($hour_working_total > 8) { // nếu làm quá 8h thực hiện nhập liệu vào bảng làm thêm
                             $overtime = $hour_working_total - 8;
                             $check_overtime = OverTime::where('day', $day)->where('employee_id',$val_em->id)->first();
                             if ($check_overtime == null) {
@@ -77,6 +77,7 @@ class SalaryController extends Controller
                             }
                             $hour_working = 8;
                         }
+                        // Xử lý làm muộn giờ
                         $check_late = LateTime::where('day', $day)->where('employee_id',$val_em->id)->first();
                         if($check_late == null) {
                             $store_late = new LateTime([
@@ -86,7 +87,7 @@ class SalaryController extends Controller
                             ]);
                             $store_late->save();
                         }
-                    } elseif (count($day_working) > 0) {
+                    } elseif (count($day_working) > 0) { // check in check out thiếu
                         $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('12:00:00'))));
                         $check_hour = number_format($hour/3600, 2) - 1.5;
                         if($check_hour > 0) {
@@ -98,6 +99,7 @@ class SalaryController extends Controller
                         }
                         
                     }
+                    // nhập liệu vào bảng working_hours
                     try {
                         $working = WorkingHours::where('day', $day)->where('employee_id', $val_em->id)->first();
                         if (isset($working) && count($working)) {
@@ -115,6 +117,7 @@ class SalaryController extends Controller
                     }   
                                     
                 }
+                // xử lý thưởng chuyên cần
                 $total_working = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
                     if($total_working >= 20){
                         $check_bonus = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',1)->first();
@@ -128,6 +131,7 @@ class SalaryController extends Controller
                             $bonus->save();
                         }
                     }
+                    // xử lý phạt đi muộn
                 $total_late_day = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
                     if($total_late_day >= 10){
                         $check_late = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',10)->first();
