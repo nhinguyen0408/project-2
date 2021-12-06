@@ -69,6 +69,11 @@
                 </div>
             </form>
             <!-- Navigation -->
+            <div class="update-time" style="color: #636363; text-align: right">
+                <small>Updated
+                    @if(App\Http\Controllers\UpdateTime::updateTime() != null) {{(App\Http\Controllers\UpdateTime::updateTime()->diffForHumans())}} @endif
+                  </small>
+              </div>
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
@@ -117,16 +122,16 @@
                     </div>
                 </li>
 
-                
-                
-                
+
+
+
             </ul>
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
-            
+
             <!-- Navigation -->
-            
+
         </div>
     </div>
 </nav>

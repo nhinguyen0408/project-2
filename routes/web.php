@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\TimeKeepingController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\TimeManager;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('salary')->name('salary.')->group(function () {
 		Route::get('', [SalaryController::class, 'index' ] )->name('index');
 		Route::get('/salary-calculation', [SalaryController::class, 'salary_calculation'])->name('salary-calculation');
+        Route::get('/details/{id}', [SalaryController::class, 'details'])->name('details');
 	});
 	Route::resource('employees', EmployeesController::class);
 	Route::prefix('time-keeping')->name('time-keeping.')->group(function () {
@@ -44,4 +46,11 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('/import-excel', [TimeKeepingController::class, 'importExcel'])->name('import-excel');
 		Route::get('/reset', [TimeKeepingController::class, 'reset'])->name('reset');
 	});
+    Route::prefix('time-manager')->name('time-manager.')->group(function () {
+        Route::get('/',[TimeManager::class, 'index'])->name('index');
+        Route::get('/details/{id}', [TimeManager::class, 'details'])->name('details');
+        Route::post('/on-leave', [TimeManager::class, 'onLeave'])->name('on-leave');
+        Route::post('/off-leave', [TimeManager::class, 'offLeave'])->name('off-leave');
+    });
+
 });

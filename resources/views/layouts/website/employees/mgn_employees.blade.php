@@ -21,9 +21,9 @@
             <div class="card-header bg-transparent" style="display: flex; align-items:center">
               <h3 class="mb-0">Nhân viên HCoffee</h3>
               <label>
-                <button class="btn btn-success" style="margin-left: 650px"><a href="{{ route('employees.create') }}" style='color: #fff;'>Thêm Nhân Viên</a></button>
+                <button class="btn btn-success" style="margin-left: 780px"><a href="{{ route('employees.create') }}" style='color: #fff;'>Thêm Nhân Viên</a></button>
               </label>
-                
+
             </div>
             <div class="card-body">
               <h3 class="mb-0">Vui lòng chọn chức vụ để tìm kiếm nhân viên:</h3>
@@ -36,7 +36,7 @@
                         @endif>{{$item->name_reg}}</option>
                     @endforeach
                   </select>
-                  
+
                   </select>
                   <button class="btn btn-primary btn-sm">OK</button>
                 </form>
@@ -72,27 +72,47 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="#">Xóa nhân viên</a>
                                             <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}">Sửa thông tin</a>
-                                            <a class="dropdown-item" href="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
-                                            <a class="dropdown-item" href="{{ route('time-keeping.working', $item->id) }}">Xem Giờ Làm</a>
+                                            <a class="dropdown-item" id="check-history" data-url="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
+                                            <a class="dropdown-item" href="{{ route('time-manager.details',$item->id) }}">Xem Giờ Làm</a>
                                             <a class="dropdown-item" href="#">Xem Lương</a>
                                         </div>
                                     </div>
                                   </td>
                                 </tr>
                             @endforeach
-                            
+
                         </tr>
-                        
+
                     </tbody>
-                    </table> 
-                    {{ $listEmployee->appends(['search'=>$search,'regency_id'=>$idRegency])->links('pagination::semantic-ui')}}      
+                    </table>
+                    {{ $listEmployee->appends(['search'=>$search,'regency_id'=>$idRegency])->links('pagination::semantic-ui')}}
         </div>
             </div>
           </div>
         </div>
       </div>
+      <div >
+        <dialog open>
+          <div id="dialog-screen" ></div>
+        </dialog>
+      </div>
       <!-- Footer -->
-     
+
     </div>
   </div>
+<script>
+  $(document).ready(function(){
+      $('#check-history').click(function(){
+        let url = $(this).attr('data-url');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType:'html',
+            success: function(data){
+                $('#dialog-screen').html(data);
+            }
+        })
+      });
+  })
+</script>
   @include('layouts.website_layout.footer')

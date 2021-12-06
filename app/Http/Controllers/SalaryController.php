@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\OverTime;
+use App\Models\OnLeave;
 use App\Models\TimeKeeping;
 use App\Models\WorkingHours;
 use App\Models\LateTime;
@@ -31,35 +32,35 @@ class SalaryController extends Controller
                     'employees.regency_id',
                     'employees.shift_id'
                     )->get();
-                $data['data_salary'] = $salary_details; 
+                $data['data_salary'] = $salary_details;
             } else {
                 $data['data_salary'] = null;
             }
         }else{
             $data['month'] = null;
         }
-       
+
         $data['page_title'] = 'Tính lương';
         return view('layouts.website.salary.get_salary', $data);
     }
 
-    public function salary_calculation()
+    public static function salary_calculation()
     {
         $check_time_keeping = TimeKeeping::first();
         $month = date('m', strtotime($check_time_keeping->checked));
         if(isset($check_time_keeping)){ // ktra có bản ghi thì chạy
-            
+
             $check_month = TimeKeeping::first();
-            $employee = Employee::all(); 
+            $employee = Employee::all();
             foreach ($employee as $val_em) { // chạy lần lượt từng nhân viên
-                $time_keeping = TimeKeeping::where('employee_id', $val_em->id)->get(); // lấy dữ liệu chấm công 
+                $time_keeping = TimeKeeping::where('employee_id', $val_em->id)->get(); // lấy dữ liệu chấm công
                 foreach ($time_keeping as $val_time) {
                     //$day = $val_time->checked;
                     $day = date('Y-m-d', strtotime($val_time->checked));
                     //dd(date('Y-m-d', strtotime($val_time->checked)));
                     $day_working = TimeKeeping::where('employee_id', $val_em->id)->where('checked', 'like', "%$day%")->get(); // lấy dữ liệu các ngày giống nhau
                     if (count($day_working) >= 2) { // check in check out đủ
-                        $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00')))); 
+                        $hour = abs(strtotime(date('H:i:s', strtotime($day_working->max('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
                         $hour_late = abs(strtotime(date('H:i:s', strtotime($day_working->min('checked')))) - strtotime(date('H:i:s', strtotime('08:00:00'))));
                         $hour_working_total = number_format($hour/3600, 2) - 1.5;
                         $late = number_format($hour_late/3600, 2);
@@ -97,7 +98,7 @@ class SalaryController extends Controller
                             $hour_working = 0;
                             $status = 0;
                         }
-                        
+
                     }
                     // nhập liệu vào bảng working_hours
                     try {
@@ -114,22 +115,26 @@ class SalaryController extends Controller
                         }
                     } catch (\Throwable $th) {
                         //throw $th;
-                    }   
-                                    
+                    }
+
                 }
                 // xử lý thưởng chuyên cần
                 $total_working = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
                     if($total_working >= 20){
                         $check_bonus = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',1)->first();
-                        if(isset($check_bonus)){
+                        $check_late = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
+                        if($check_late <=3){
+                            if(isset($check_bonus)){
 
-                        } else {
-                            $bonus = new RegulationDetails([
-                                'employee_id'=> $val_em->id,
-                                'regulation_id' => 1,
-                            ]);
-                            $bonus->save();
+                            } else {
+                                $bonus = new RegulationDetails([
+                                    'employee_id'=> $val_em->id,
+                                    'regulation_id' => 1,
+                                ]);
+                                $bonus->save();
+                            }
                         }
+
                     }
                     // xử lý phạt đi muộn
                 $total_late_day = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
@@ -203,9 +208,10 @@ class SalaryController extends Controller
                 }
                     // Tính lương
                 if($val_em->regency_id == 1 || $val_em->regency_id == 4 || $val_em->regency_id == 6){
+                    $total_on_leave = OnLeave::where('employee_id', $val_em->id)->get()->count();
                     $total_working_day = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
-                    $earning = $total_working_day * $salary->earnings;
-                    $total_time = $total_working_day;
+                    $earning = ($total_working_day + $total_on_leave) * $salary->earnings + ($salary->earnings/8) * 1.4 * $total_over_time;
+                    $total_time = $total_working_day + $total_on_leave;
                 } else {
                     $worked = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get();
                     $total_working_hours = 0;
@@ -235,12 +241,51 @@ class SalaryController extends Controller
                     $check_salary_details->penalize = $total_penalize;
                     $check_salary_details->save();
                 }
-                
+
             }
         } else {
             print_r("Please import Check-in/ Check-out");
         }
         return redirect()->back();
+    }
+
+    public function details($id) {
+        $check_month = TimeKeeping::first();
+        if(isset($check_month)){
+            $month = date('m', strtotime($check_month->checked));
+            $data['month'] = $month;
+            $check_salary_details = SalaryDetails::where('month', $month)->where('employee_id',$id)->first();
+            $over_time = OverTime::where('employee_id',$id)->get();
+            $total_over_time = 0;
+            foreach ($over_time as $item){
+                $total_over_time += $item->hours;
+            }
+            $employee = Employee::find($id);
+            $regulations = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')->where('regulation_details.employee_id',$id)->get();
+            $data['employee'] =  $employee;
+            $data['regulations'] =  $regulations;
+            $data['overtime'] =  $total_over_time;
+            $data['employee_name'] = $employee->first_name .' ' . $employee->last_name;
+            if(isset($check_salary_details)){
+                $salary_details = SalaryDetails::join('employees','salary_details.employee_id','=','employees.id')
+                ->where('month', $month)->where('employee_id', $id)
+                ->select(
+                    'salary_details.*',
+                    'employees.first_name',
+                    'employees.last_name',
+                    'employees.regency_id',
+                    'employees.shift_id'
+                    )->first();
+                $data['data_salary'] = $salary_details;
+            } else {
+                $data['data_salary'] = null;
+            }
+        }else{
+            $data['month'] = null;
+        }
+
+        $data['page_title'] = 'Chi tiết lương';
+        return view('layouts.website.salary.details', $data);
     }
 
 }

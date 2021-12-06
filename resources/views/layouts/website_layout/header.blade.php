@@ -10,6 +10,11 @@
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
           <!-- Nav items -->
+          <div class="update-time" style="color: #636363; text-align: right">
+            <small>Updated
+              @if(App\Http\Controllers\UpdateTime::updateTime() != null) {{(App\Http\Controllers\UpdateTime::updateTime()->diffForHumans())}} @endif
+            </small>
+          </div>
           <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
@@ -30,7 +35,7 @@
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                              <a class="nav-link" href="" style="color: rgb(190, 146, 146); font-weight: bold">
+                              <a class="nav-link" href="{{ route('time-manager.index') }}" style="color: rgb(190, 146, 146); font-weight: bold">
                                   {{ __('Quản lý giờ làm') }}
                               </a>
                             </li>
@@ -49,7 +54,7 @@
                                     {{ __('Lương') }}
                                 </a>
                             </li>
-                            
+
                             <li class="nav-item">
                               <a class="nav-link" href="">
                                   {{ __('Thưởng phạt') }}
@@ -92,7 +97,7 @@
                 </div>
               </div>
             </li>
-            
+
           </ul>
           <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
             <li class="nav-item dropdown">

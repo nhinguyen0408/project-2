@@ -82,6 +82,7 @@ class TimeKeepingController extends Controller
     public function importExcel(Request $request)
     {
         Excel::import(new TimeKeepingImport, $request->file('excel'));
+        SalaryController::salary_calculation();
         return redirect()->back();
     }
     public function reset(){
@@ -90,6 +91,7 @@ class TimeKeepingController extends Controller
         DB::table('working_hours')->delete();
         DB::table('late_time')->delete();
         DB::table('regulation_details')->delete();
+        DB::table('on_leave')->delete();
         return redirect()->back();
     }
 }

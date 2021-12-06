@@ -50,7 +50,7 @@
         @endphp
         <div class="total_number" style=" display: flex; align-items:center; justify-content: flex-end">
             {{-- Tổng giờ làm nhân viên --}}
-            <div class="col-xl-3 col-lg-6">
+            <div class="col-xl-4 col-lg-6">
                 <div class="card card-stats mb-4 mb-xl-0">
                     <div class="card-body" style=" box-shadow: 10px 10px 5px rgba(61, 61, 61, 0.6)">
                         <div class="row">
