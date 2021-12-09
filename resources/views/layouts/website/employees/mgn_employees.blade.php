@@ -72,9 +72,9 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="#">Xóa nhân viên</a>
                                             <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}">Sửa thông tin</a>
-                                            <a class="dropdown-item" id="check-history" data-url="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
+                                            <a class="dropdown-item" href="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
                                             <a class="dropdown-item" href="{{ route('time-manager.details',$item->id) }}">Xem Giờ Làm</a>
-                                            <a class="dropdown-item" href="#">Xem Lương</a>
+                                            <a class="dropdown-item" href="{{ route('salary.details',$item->id) }}">Xem Lương</a>
                                         </div>
                                     </div>
                                   </td>
@@ -91,28 +91,12 @@
           </div>
         </div>
       </div>
-      <div >
-        <dialog open>
-          <div id="dialog-screen" ></div>
-        </dialog>
-      </div>
+
       <!-- Footer -->
 
     </div>
   </div>
 <script>
-  $(document).ready(function(){
-      $('#check-history').click(function(){
-        let url = $(this).attr('data-url');
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType:'html',
-            success: function(data){
-                $('#dialog-screen').html(data);
-            }
-        })
-      });
-  })
+
 </script>
   @include('layouts.website_layout.footer')

@@ -15,11 +15,11 @@ class Employee extends Model
         'last_name',
         'address',
         'gender',
-        'email ',
-        'phone ',
-        'regency_id ',
-        'salary_id ',
-        'shift_id '
+        'email',
+        'phone',
+        'regency_id',
+        'salary_id',
+        'shift_id'
     ];
 
     public function GetSexNameAttribute()

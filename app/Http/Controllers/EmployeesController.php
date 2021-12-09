@@ -47,7 +47,7 @@ class EmployeesController extends Controller
                 )
             ->paginate(7);
         }
-    
+
         $listRegency = Regency::all();
         $listShift = Shift::all();
         return view('layouts.website.employees.mgn_employees', [
@@ -95,16 +95,18 @@ class EmployeesController extends Controller
         $idRegency = $request->get("regency_id");
         $idShift = $request->get("shift_id");
         $idSalary = $request->get("salary_id");
-        $employee = new Employee();
-        $employee->first_name = $first_name;
-        $employee->last_name = $last_name;
-        $employee->gender = $gender;
-        $employee->address = $address;
-        $employee->email = $email;
-        $employee->phone = $phone;
-        $employee->regency_id = $idRegency;
-        $employee->shift_id = $idShift;
-        $employee->salary_id = $idSalary;
+        $employee = new Employee([
+            'first_name' => $request->get("first_name"),
+            'last_name' => $last_name,
+            'address' => $address,
+            'gender' => $gender,
+            'email' => $email,
+            'phone' => $phone,
+            'regency_id' => $regency_id,
+            'salary_id' => $salary_id,
+            'shift_id' => $shift_id,
+        ]);
+
         $employee->save();
         return redirect(route('employees.index'));
     }
@@ -139,7 +141,6 @@ class EmployeesController extends Controller
                 'shift.shift_name'
             )
             ->first();
-
         $listRegency = Regency::all();
         $listShift = Shift::all();
         $listSalary = Salary::all();
@@ -168,9 +169,9 @@ class EmployeesController extends Controller
             'gender' => $request->get('gender'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
-            'regency_id ' => $request->get('regency_id'),
-            'salary_id ' => $request->get('salary_id'),
-            'shift_id ' => $request->get('shift_id')
+            'regency_id' => $request->get('regency_id'),
+            'salary_id' => $request->get('salary_id'),
+            'shift_id' => $request->get('shift_id')
         ]);
         return redirect(route('employees.index'));
 

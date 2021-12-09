@@ -34,7 +34,7 @@
                         @php
                             $salary = App\Models\Salary::find($employee->salary_id);
                         @endphp
-                        <td text-align="left">{{$data_salary->total_time * $salary->earnings}} VND</td>
+                        <td text-align="left">{{number_format($data_salary->total_time * $salary->earnings, 0, ',')}} VND</td>
                     </tr>
                     <tr>
                         <td>Tổng làm việc:</td>
@@ -43,7 +43,7 @@
                     <tr>
                         <td>Tổng giờ tăng ca:</td>
 
-                        <td>{{$overtime}} | Lương tăng ca: {{$data_salary->salary_earning - $data_salary->total_time * $salary->earnings}} VND</td>
+                        <td>{{$overtime}} | Lương tăng ca: {{number_format($data_salary->salary_earning - $data_salary->total_time * $salary->earnings, 0, ',')}} VND</td>
                     </tr>
                     <tr style='text-align: center; weight: bold; font-size: 14px;'><td colspan="2">Phụ cấp , Thưởng & Phạt</td></tr>
                     @if($regulations != null)
@@ -66,7 +66,7 @@
                     @endif
                     <tr>
                         <td>Thực nhận:</td>
-                        <th style='font-size: 15px;'>{{$data_salary->salary_earning}} VND</th>
+                        <th style='font-size: 15px;'>{{number_format($data_salary->salary_earning, 0, ',')}} VND</th>
                     </tr>
 
                 </thead>

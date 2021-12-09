@@ -120,7 +120,7 @@ class SalaryController extends Controller
                 }
                 // xử lý thưởng chuyên cần
                 $total_working = WorkingHours::where('employee_id', $val_em->id)->where('status',1)->get()->count();
-                    if($total_working >= 20){
+                    if($total_working >= 29){
                         $check_bonus = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',1)->first();
                         $check_late = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
                         if($check_late <=3){

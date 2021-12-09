@@ -8,7 +8,7 @@
               <h6 class="h2 text-white d-inline-block mb-0">Check-in & Check-out</h6>
             </div>
             <div class="col-lg-6 col-5 text-right">
-              <a href="{{ route('time-keeping.reset') }}" class="btn btn-sm btn-neutral" 
+              <a href="{{ route('time-keeping.reset') }}" onclick="return confirm('Are you sure you want to reset')" class="btn btn-sm btn-neutral"
               style="background: rgb(71, 12, 12) !important;  color: white">Reset Check-in/Check-out</i></a>
             </div>
           </div>
@@ -40,11 +40,11 @@
                                   <td>{{$item->checked}}</td>
                                 </tr>
                             @endforeach
-                            
+
                         </tr>
-                        
+
                     </tbody>
-                    </table>   
+                    </table>
               </div>
             @elseif(isset($important) && $important != null)
               <span class="d-flex w-100 align-items-center" style="line-height: 40px  ; padding: 10px 10px 10px 300px">{!!$important !!}</span>
@@ -56,7 +56,7 @@
                         <label class="form-label" for="customFile">Trong file excel có các cột Mã nhân viên và check-in</label>
                         <input type="file" name="excel" class="form-control"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                            
+
                             <button class="btn btn-sm btn-neutral" style='margin-top: 20px;'>Cập nhật chấm công</i></button>
                     </div>
                 </form>
@@ -69,7 +69,7 @@
                         <label class="form-label" for="customFile">Trong file excel có các cột Mã nhân viên và check-in</label>
                         <input type="file" name="excel" class="form-control"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                            
+
                             <button class="btn btn-sm btn-neutral" style='margin-top: 20px;'>Import (Excel)</i></button>
                     </div>
                 </form>
@@ -92,18 +92,18 @@
                                   <td>{{$item->checked}}</td>
                                 </tr>
                             @endforeach
-                            
+
                         </tr>
-                        
+
                     </tbody>
-                    </table>   
+                    </table>
               </div>
             @endif
           </div>
         </div>
       </div>
       <!-- Footer -->
-     
+
     </div>
   </div>
   @include('layouts.website_layout.footer')
