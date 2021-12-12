@@ -5,8 +5,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Brand -->
-        <a class="navbar-brand pt-0" href="{{ route('home') }}">
-            <img src="{{ asset('argon') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
+        <a class="navbar-brand pt-0" style="height: 130px !important;" href="{{ route('home') }}">
+            <img src="/assets/image/logo-cafe.png" style="max-height: 100px !important;" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -26,10 +26,7 @@
                         <i class="ni ni-single-02"></i>
                         <span>{{ __('My profile') }}</span>
                     </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="ni ni-settings-gear-65"></i>
-                        <span>{{ __('Settings') }}</span>
-                    </a>
+
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
@@ -44,11 +41,11 @@
             <!-- Collapse header -->
             <div class="navbar-collapse-header d-md-none">
                 <div class="row">
-                    <div class="col-6 collapse-brand">
-                        <a href="{{ route('home') }}">
-                            <img src="{{ asset('argon') }}/img/brand/blue.png">
+                    <div class="sidenav-header  align-items-center" style="height: 130px;">
+                        <a class="navbar-brand" style="height: 130px;" href="{{ route('home') }}">
+                          <img src="/assets/image/logo-cafe.png" style="max-height: 100px !important;" class="" alt="...">
                         </a>
-                    </div>
+                      </div>
                     <div class="col-6 collapse-close">
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
                             <span></span>
@@ -82,7 +79,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('salary.index') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Tính lương') }}
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Lương') }}
                     </a>
                 </li>
                 <li class="nav-item">
@@ -94,7 +91,7 @@
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="" style="color: rgb(190, 146, 146); font-weight: bold">
+                                <a class="nav-link" href="{{ route('time-manager.index') }}" style="color: rgb(190, 146, 146); font-weight: bold">
                                     {{ __('Quản lý giờ làm') }}
                                 </a>
                               </li>
@@ -108,13 +105,9 @@
                                     {{ __('Check-in/Check-out') }}
                                 </a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link" href="">
-                                    {{ __('Lương') }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="">
+                                <a class="nav-link" href="{{ route('regulations.index') }}">
                                     {{ __('Thưởng phạt') }}
                                 </a>
                             </li>

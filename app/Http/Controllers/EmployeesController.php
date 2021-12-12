@@ -92,9 +92,9 @@ class EmployeesController extends Controller
         $address = $request->get("address");
         $email = $request->get("email");
         $phone = $request->get("phone");
-        $idRegency = $request->get("regency_id");
-        $idShift = $request->get("shift_id");
-        $idSalary = $request->get("salary_id");
+        $regency_id = $request->get("regency_id");
+        $shift_id = $request->get("shift_id");
+        $salary_id = $request->get("salary_id");
         $employee = new Employee([
             'first_name' => $request->get("first_name"),
             'last_name' => $last_name,
@@ -105,6 +105,7 @@ class EmployeesController extends Controller
             'regency_id' => $regency_id,
             'salary_id' => $salary_id,
             'shift_id' => $shift_id,
+            'leave' =>0,
         ]);
 
         $employee->save();
@@ -187,5 +188,9 @@ class EmployeesController extends Controller
     public function destroy($id)
     {
         //
+        Employee::where('id', $id)->delete();
+
+        return redirect(route('employees.index'));
     }
+
 }

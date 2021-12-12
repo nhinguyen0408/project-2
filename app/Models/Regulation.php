@@ -9,5 +9,6 @@ class Regulation extends Model
 {
     use HasFactory;
     protected $table = 'regulation';
+    protected $fillable = ['amount_of_money', 'description', 'status'];
     public $timestamps = false;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\OverTime;
 use App\Models\OnLeave;
+use App\Models\LeaveVoluntarily;
 use App\Models\TimeKeeping;
 use App\Models\WorkingHours;
 use App\Models\LateTime;
@@ -95,6 +96,27 @@ class TimeManager extends Controller
             $employee = Employee::find($request->employee_id);
             $leave = $employee->leave;
             DB::table('employees')->where('id', $request->employee_id)->update(['leave'=> $leave + 1]);
+            SalaryController::salary_calculation();
+        }
+    }
+    // xử lý nghỉ không phép
+    public function leave_voluntarily(Request $request){
+
+            $fill = new LeaveVoluntarily(['employee_id'=>$request->employee_id, 'day'=> $request->day, 'month'=> $request->month]);
+            $fill->save();
+            $regulation = new RegulationDetails(['employee_id' => $request->employee_id, 'regulation_id' =>13]);
+            $regulation->save();
+            SalaryController::salary_calculation();
+
+    }
+    public function delete_leave_voluntarily(Request $request){
+        $check_leave_voluntarily = LeaveVoluntarily::where('employee_id', $request->employee_id)->first();
+        if($check_leave_voluntarily != null){
+            DB::table('leave_voluntarily')->where('employee_id', $request->employee_id)->where('day', $request->day)->delete();
+            $check = DB::table('regulation_details')->where('employee_id', $request->employee_id)->where('regulation_id', 13)->first();
+            if($check != null){
+                DB::table('regulation_details')->where('employee_id', $request->employee_id)->where('regulation_id', 13)->limit(1)->delete();
+            }
             SalaryController::salary_calculation();
         }
     }

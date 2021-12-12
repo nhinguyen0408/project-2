@@ -70,7 +70,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" href="#">Xóa nhân viên</a>
+                                            <a class="dropdown-item" data-url="{{ route('destroy_emloyee', $item->id) }}">Xóa nhân viên</a>
                                             <a class="dropdown-item" href="{{ route('employees.edit', $item->id) }}">Sửa thông tin</a>
                                             <a class="dropdown-item" href="{{ route('time-keeping.view', $item->id) }}">Xem Lịch Sử Chấm Công</a>
                                             <a class="dropdown-item" href="{{ route('time-manager.details',$item->id) }}">Xem Giờ Làm</a>

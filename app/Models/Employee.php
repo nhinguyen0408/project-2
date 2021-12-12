@@ -19,7 +19,8 @@ class Employee extends Model
         'phone',
         'regency_id',
         'salary_id',
-        'shift_id'
+        'shift_id',
+        'leave'
     ];
 
     public function GetSexNameAttribute()

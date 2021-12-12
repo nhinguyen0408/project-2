@@ -13,6 +13,8 @@ use App\Models\Salary;
 use App\Models\SalaryDetails;
 use App\Models\RegulationDetails;
 use Carbon\Carbon;
+use App\Exports\SalaryExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryController extends Controller
 {
@@ -136,6 +138,24 @@ class SalaryController extends Controller
                         }
 
                     }
+                    if($total_working >=20){
+                        $check_bonus_antrua = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',11)->first();
+                        $check_bonus_xangxe = RegulationDetails::where('employee_id', $val_em->id)->where('regulation_id',12)->first();
+                        if(!isset($check_bonus_antrua)){
+                            $bonus_antrua = new RegulationDetails([
+                                'employee_id'=> $val_em->id,
+                                'regulation_id' => 11,
+                            ]);
+                            $bonus_antrua->save();
+                        }
+                        if(!isset($check_bonus_xangxe)){
+                            $bonus_xangxe = new RegulationDetails([
+                                'employee_id'=> $val_em->id,
+                                'regulation_id' => 12,
+                            ]);
+                            $bonus_xangxe->save();
+                        }
+                    }
                     // xử lý phạt đi muộn
                 $total_late_day = LateTime::where('hours', '>',0.5)->where('employee_id',$val_em->id)->get()->count();
                     if($total_late_day >= 10){
@@ -182,22 +202,37 @@ class SalaryController extends Controller
                 $salary = Salary::where('id',$val_em->salary_id)->first();
                     // tính thưởng
                 $bonus_earning = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
-                    ->where('regulation_details.employee_id',$val_em->id)
-                    ->where('status',1)->get();
+                    ->where('regulation.status',1)->where('regulation_details.employee_id',$val_em->id)->get();
+                $bonus_all = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
+                ->where('regulation.status',3)->where('regulation_details.employee_id',$val_em->id)->get();
                 $total_bonus_earning = 0;
                 if(isset($bonus_earning)){
                     foreach ($bonus_earning as $val_bonus){
                         $total_bonus_earning =  $total_bonus_earning + $val_bonus->amount_of_money;
                     }
                 }
+                if(isset($bonus_all)){
+                    foreach ($bonus_all as $val_bonus_all){
+                        $total_bonus_earning =  $total_bonus_earning + $val_bonus_all->amount_of_money;
+                    }
+                }
+
                     // tính phạt
                 $penalize = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
                 ->where('regulation_details.employee_id',$val_em->id)
                 ->where('status',0)->get();
+                $penalize_private = RegulationDetails::join('regulation','regulation_details.regulation_id','=','regulation.id')
+                ->where('regulation_details.employee_id',$val_em->id)
+                ->where('status',2)->get();
                 $total_penalize = 0;
                 if(isset($penalize)){
                     foreach ($penalize as $val_pen){
                         $total_penalize =  $total_penalize + $val_pen->amount_of_money;
+                    }
+                }
+                if(isset($penalize_private)){
+                    foreach ($penalize_private as $val_pen2){
+                        $total_penalize =  $total_penalize + $val_pen2->amount_of_money;
                     }
                 }
                     // tính tổng tăng ca
@@ -286,6 +321,11 @@ class SalaryController extends Controller
 
         $data['page_title'] = 'Chi tiết lương';
         return view('layouts.website.salary.details', $data);
+    }
+
+    public function export($id){
+        $date = Carbon::now();
+        return Excel::download(new SalaryExport($id), $date .'employee.xlsx');
     }
 
 }

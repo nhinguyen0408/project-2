@@ -48,25 +48,25 @@
                     <tr style='text-align: center; weight: bold; font-size: 14px;'><td colspan="2">Phụ cấp , Thưởng & Phạt</td></tr>
                     @if($regulations != null)
                         @foreach($regulations as $item)
-                        @if($item->status == 1)
+                        @if($item->status == 1 || $item->status == 3)
                             <tr>
                                 <td>{{$item->description}}</td>
-                                <td>{{$item->amount_of_money}}</td>
+                                <td>+ {{number_format($item->amount_of_money, 0, ',')}} VNĐ</td>
                             </tr>
                         @endif
                         @endforeach
                         @foreach($regulations as $item)
-                        @if($item->status == 0)
+                        @if($item->status == 0 || $item->status == 2)
                             <tr>
                                 <td>{{$item->description}}</td>
-                                <td>{{$item->amount_of_money}}</td>
+                                <td> - {{number_format($item->amount_of_money, 0, ',')}} VNĐ</td>
                             </tr>
                         @endif
                         @endforeach
                     @endif
                     <tr>
                         <td>Thực nhận:</td>
-                        <th style='font-size: 15px;'>{{number_format($data_salary->salary_earning, 0, ',')}} VND</th>
+                        <th style='font-size: 15px;'>{{number_format($data_salary->salary_earning + $data_salary->bonus_earning - $data_salary->penalize, 0, ',')}} VND</th>
                     </tr>
 
                 </thead>
@@ -79,6 +79,8 @@
             </tbody>
             </table>
             @endif
+            <br>
+            <a href="{{route('salary.export-salary',$employee->id)}}"><button type="button" class="btn btn-outline-success"> Export to Excel</button></a>
             </div>
           </div>
         </div>

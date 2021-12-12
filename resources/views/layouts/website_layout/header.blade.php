@@ -1,9 +1,9 @@
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
-      <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="javascript:void(0)">
-          <img src="/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+      <div class="sidenav-header  align-items-center" style="height: 130px;">
+        <a class="navbar-brand" style="height: 130px;" href="javascript:void(0)">
+          <img src="/assets/image/logo-cafe.png" style="max-height: 100px !important;" class="" alt="...">
         </a>
       </div>
       <div class="navbar-inner">
@@ -23,7 +23,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('salary.index') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> <span class="font-weight-bold">{{ __('Tính lương') }}</span>
+                        <i class="ni ni-tv-2 text-primary"></i> <span class="font-weight-bold">{{ __('Lương') }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -49,14 +49,9 @@
                                     {{ __('Check-in/Check-out') }}
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="">
-                                    {{ __('Lương') }}
-                                </a>
-                            </li>
 
                             <li class="nav-item">
-                              <a class="nav-link" href="">
+                              <a class="nav-link" href="{{ route('regulations.index') }}">
                                   {{ __('Thưởng phạt') }}
                               </a>
                           </li>
@@ -119,9 +114,8 @@
                   <i class="ni ni-single-02"></i>
                   <span>My profile</span>
                 </a>
-                <a href="#!" class="dropdown-item">
-                  <i class="ni ni-settings-gear-65"></i>
-                  <span>Settings</span>
+
+
                 <div class="dropdown-divider"></div>
                 <a href="#!" class="dropdown-item">
                   <i class="ni ni-user-run"></i>

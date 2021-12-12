@@ -16,10 +16,7 @@ class RegulationDetails extends Migration
         //
         Schema::create('regulation_details', function (Blueprint $table) {
             $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees');
             $table->unsignedBigInteger('regulation_id');
-            $table->foreign('regulation_id')->references('id')->on('regulation');
-            $table->primary(['employee_id', 'regulation_id']);
         });
     }
 
